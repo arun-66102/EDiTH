@@ -1,0 +1,82 @@
+[
+  {
+    "case_id": "CASE-001",
+    "dr_grade": 0,
+    "lesion_types": [],
+    "clinical_notes": "58-year-old male with Type 2 diabetes for 12 years. HbA1c 6.8%. No visible retinal lesions. Fundus appears normal with clear optic disc margins and healthy vasculature.",
+    "treatment": "Continue current diabetes management. Annual screening recommended.",
+    "validated_report": "No evidence of diabetic retinopathy. Retinal vasculature appears normal. Optic disc and macula are unremarkable. Recommend annual fundus screening."
+  },
+  {
+    "case_id": "CASE-002",
+    "dr_grade": 1,
+    "lesion_types": ["microaneurysms"],
+    "clinical_notes": "45-year-old female with Type 2 diabetes for 8 years. HbA1c 7.5%. A few scattered microaneurysms visible in the temporal region. No hemorrhages or exudates.",
+    "treatment": "Optimize glycemic control. Repeat screening in 12 months.",
+    "validated_report": "Mild non-proliferative diabetic retinopathy detected. Scattered microaneurysms observed in the temporal quadrant. No hard exudates, hemorrhages, or neovascularization. Recommend glycemic optimization and 12-month follow-up."
+  },
+  {
+    "case_id": "CASE-003",
+    "dr_grade": 2,
+    "lesion_types": ["microaneurysms", "hemorrhages", "hard_exudates"],
+    "clinical_notes": "62-year-old male with Type 2 diabetes for 18 years. HbA1c 8.9%. Multiple microaneurysms and dot-blot hemorrhages in all quadrants. Scattered hard exudates near the macula.",
+    "treatment": "Urgent referral to ophthalmologist. Intensify glycemic control. Re-screen in 3–6 months.",
+    "validated_report": "Moderate non-proliferative diabetic retinopathy. Microaneurysms and dot-blot hemorrhages are present in multiple quadrants. Hard exudates observed near the macula, raising concern for clinically significant macular edema. Urgent ophthalmology referral recommended."
+  },
+  {
+    "case_id": "CASE-004",
+    "dr_grade": 2,
+    "lesion_types": ["microaneurysms", "hemorrhages"],
+    "clinical_notes": "50-year-old female with Type 1 diabetes for 25 years. HbA1c 8.2%. Moderate number of microaneurysms and intraretinal hemorrhages. No exudates or cotton wool spots.",
+    "treatment": "Ophthalmology referral within 4 weeks. Review diabetes management plan.",
+    "validated_report": "Moderate non-proliferative diabetic retinopathy. Intraretinal hemorrhages and microaneurysms distributed across multiple quadrants. No signs of proliferative changes. Recommend ophthalmology evaluation within one month."
+  },
+  {
+    "case_id": "CASE-005",
+    "dr_grade": 3,
+    "lesion_types": ["microaneurysms", "hemorrhages", "cotton_wool_spots", "venous_beading"],
+    "clinical_notes": "67-year-old male with Type 2 diabetes for 22 years. HbA1c 9.4%. Extensive intraretinal hemorrhages in all four quadrants. Cotton wool spots and venous beading observed. No neovascularization yet.",
+    "treatment": "Immediate ophthalmology referral. Consider pan-retinal photocoagulation. Aggressive blood sugar and blood pressure management.",
+    "validated_report": "Severe non-proliferative diabetic retinopathy. Meets 4-2-1 rule criteria with hemorrhages in all four quadrants and venous beading. Cotton wool spots present. High risk of progression to proliferative DR. Immediate referral for possible pan-retinal photocoagulation."
+  },
+  {
+    "case_id": "CASE-006",
+    "dr_grade": 3,
+    "lesion_types": ["hemorrhages", "cotton_wool_spots", "IRMA"],
+    "clinical_notes": "55-year-old female with uncontrolled Type 2 diabetes. HbA1c 10.1%. Intraretinal microvascular abnormalities (IRMA) in the nasal region. Multiple cotton wool spots and flame hemorrhages.",
+    "treatment": "Urgent ophthalmology referral for laser therapy evaluation. Diabetes education and medication adjustment.",
+    "validated_report": "Severe non-proliferative diabetic retinopathy with high-risk features. IRMA, cotton wool spots, and extensive flame hemorrhages indicate imminent risk of proliferative conversion. Urgent laser therapy evaluation required."
+  },
+  {
+    "case_id": "CASE-007",
+    "dr_grade": 4,
+    "lesion_types": ["neovascularization", "hemorrhages", "hard_exudates", "vitreous_hemorrhage"],
+    "clinical_notes": "70-year-old male with Type 2 diabetes for 30 years. HbA1c 9.8%. Active neovascularization at the disc (NVD) and elsewhere (NVE). Vitreous hemorrhage in the right eye. Tractional retinal detachment suspected.",
+    "treatment": "Emergency ophthalmology referral. Pan-retinal photocoagulation or anti-VEGF injections. Possible vitrectomy if tractional detachment confirmed.",
+    "validated_report": "Proliferative diabetic retinopathy with high-risk characteristics. Active neovascularization at the disc and elsewhere with vitreous hemorrhage. Possible tractional retinal detachment. Emergency intervention with anti-VEGF therapy and/or pan-retinal photocoagulation is indicated. Vitrectomy may be necessary."
+  },
+  {
+    "case_id": "CASE-008",
+    "dr_grade": 4,
+    "lesion_types": ["neovascularization", "hemorrhages", "fibrous_proliferation"],
+    "clinical_notes": "63-year-old female with Type 1 diabetes for 35 years. HbA1c 8.7%. Florid neovascularization with fibrous proliferation. Pre-retinal hemorrhage observed. Previous pan-retinal photocoagulation scars present.",
+    "treatment": "Anti-VEGF injections. Evaluate for additional laser treatment. Close follow-up every 2–4 weeks.",
+    "validated_report": "Proliferative diabetic retinopathy with fibrous proliferation despite prior pan-retinal photocoagulation. Active neovascularization and pre-retinal hemorrhage indicate disease progression. Anti-VEGF therapy recommended with frequent monitoring."
+  },
+  {
+    "case_id": "CASE-009",
+    "dr_grade": 1,
+    "lesion_types": ["microaneurysms"],
+    "clinical_notes": "40-year-old male with newly diagnosed Type 2 diabetes. HbA1c 7.2%. Single microaneurysm in the temporal arcade region. Otherwise normal fundus.",
+    "treatment": "Lifestyle modification. Repeat fundus screening in 12 months.",
+    "validated_report": "Mild non-proliferative diabetic retinopathy. Isolated microaneurysm detected in the temporal arcade. No other retinal abnormalities. Recommend lifestyle modifications, glycemic optimization, and annual follow-up screening."
+  },
+  {
+    "case_id": "CASE-010",
+    "dr_grade": 0,
+    "lesion_types": [],
+    "clinical_notes": "52-year-old female with Type 2 diabetes for 5 years. HbA1c 6.5%. Well-controlled diabetes. Normal fundus examination with no retinal lesions detected.",
+    "treatment": "Continue current management. Annual screening.",
+    "validated_report": "No diabetic retinopathy detected. Fundus examination is normal. Patient's diabetes is well-controlled. Continue current treatment plan and schedule annual retinal screening."
+  }
+]
