@@ -7,8 +7,10 @@
 
 // ============================================================
 // Configuration
-// ============================================================
-const API_BASE = "http://127.0.0.1:8000/api";
+// Dynamic API base: uses origin if served directly from backend, or defaults to port 8000
+const API_BASE = (window.location.protocol.startsWith("http") && (window.location.port === "8000" || window.location.port === ""))
+    ? `${window.location.origin}/api`
+    : "http://127.0.0.1:8000/api";
 
 const DR_LABELS = ["No DR", "Mild", "Moderate", "Severe", "Proliferative DR"];
 const SEVERITY_COLORS = ["#34d399", "#fbbf24", "#fb923c", "#f87171", "#dc2626"];
@@ -35,6 +37,7 @@ const serverStatus = document.getElementById("serverStatus");
 let selectedFile = null;
 let originalImageDataUrl = null;
 let gradcamImageDataUrl = null;
+let loadingInterval = null;
 
 // ============================================================
 // Server Health Check
@@ -64,6 +67,11 @@ async function checkServerHealth() {
 // Upload Handling
 // ============================================================
 uploadZone.addEventListener("click", () => fileInput.click());
+
+// Reset file input value on click so re-uploading the same file fires change event
+fileInput.addEventListener("click", (e) => {
+    e.target.value = "";
+});
 
 uploadZone.addEventListener("dragover", (e) => {
     e.preventDefault();
@@ -115,26 +123,44 @@ function resetUpload() {
     originalImageDataUrl = null;
     gradcamImageDataUrl = null;
     fileInput.value = "";
+    previewImage.src = "";
+    previewFilename.textContent = "";
+
     uploadZone.style.display = "flex";
     preview.style.display = "none";
     uploadSection.style.display = "block";
     loadingSection.style.display = "none";
     resultsSection.style.display = "none";
     errorSection.style.display = "none";
+
+    analyzeBtn.disabled = false;
+    analyzeBtn.innerHTML = '<span class="btn__icon">🔬</span> Analyze';
+
+    if (loadingInterval) {
+        clearInterval(loadingInterval);
+        loadingInterval = null;
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 // ============================================================
 // Analysis
 // ============================================================
 analyzeBtn.addEventListener("click", startAnalysis);
-retryBtn.addEventListener("click", () => {
-    errorSection.style.display = "none";
-    uploadSection.style.display = "block";
-});
+retryBtn.addEventListener("click", resetUpload);
 newAnalysisBtn.addEventListener("click", resetUpload);
+
+const topNewAnalysisBtn = document.getElementById("topNewAnalysisBtn");
+if (topNewAnalysisBtn) {
+    topNewAnalysisBtn.addEventListener("click", resetUpload);
+}
 
 async function startAnalysis() {
     if (!selectedFile) return;
+
+    analyzeBtn.disabled = true;
+    analyzeBtn.innerHTML = '<span class="btn__icon">⏳</span> Analyzing...';
 
     // Show loading
     uploadSection.style.display = "none";
@@ -164,17 +190,29 @@ async function startAnalysis() {
 
     } catch (err) {
         showError(err.message || "Failed to connect to the server. Is the backend running?");
+    } finally {
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = '<span class="btn__icon">🔬</span> Analyze';
+        if (loadingInterval) {
+            clearInterval(loadingInterval);
+            loadingInterval = null;
+        }
     }
 }
 
 function animateLoadingSteps() {
+    if (loadingInterval) {
+        clearInterval(loadingInterval);
+        loadingInterval = null;
+    }
+
     const steps = document.querySelectorAll(".loading-step");
     steps.forEach((s) => {
         s.classList.remove("active", "done");
     });
 
     let current = 0;
-    const interval = setInterval(() => {
+    loadingInterval = setInterval(() => {
         if (current > 0) {
             steps[current - 1].classList.remove("active");
             steps[current - 1].classList.add("done");
@@ -183,7 +221,8 @@ function animateLoadingSteps() {
             steps[current].classList.add("active");
             current++;
         } else {
-            clearInterval(interval);
+            clearInterval(loadingInterval);
+            loadingInterval = null;
         }
     }, 1200);
 }
@@ -330,20 +369,20 @@ function renderGradCAM(gradcamBase64) {
         btn.classList.add("btn--active");
     }
 
-    toggleOriginal.addEventListener("click", () => {
+    toggleOriginal.onclick = () => {
         img.src = originalImageDataUrl;
         setActiveToggle(toggleOriginal);
-    });
+    };
 
-    toggleHeatmap.addEventListener("click", () => {
+    toggleHeatmap.onclick = () => {
         img.src = gradcamImageDataUrl;
         setActiveToggle(toggleHeatmap);
-    });
+    };
 
-    toggleOverlay.addEventListener("click", () => {
-        img.src = gradcamImageDataUrl; // The API returns overlay by default
+    toggleOverlay.onclick = () => {
+        img.src = gradcamImageDataUrl;
         setActiveToggle(toggleOverlay);
-    });
+    };
 }
 
 // --- Similar Cases ---

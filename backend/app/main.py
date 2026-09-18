@@ -97,6 +97,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from pathlib import Path
+
 # --- Routes ---
 app.include_router(health.router, prefix="/api", tags=["Health"])
 app.include_router(analyze.router, prefix="/api", tags=["Analysis"])
+
+# --- Serve Frontend directly at root URL (http://127.0.0.1:8000/) ---
+frontend_dir = Path(__file__).resolve().parent.parent.parent / "frontend"
+if frontend_dir.exists():
+    app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+

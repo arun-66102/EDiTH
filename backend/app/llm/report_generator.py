@@ -17,6 +17,36 @@ from app.llm.prompts import SYSTEM_PROMPT, build_report_prompt
 logger = logging.getLogger("edith.report_generator")
 
 
+def remove_markdown_tables(text: str) -> str:
+    """
+    Ensure the report contains only narrative paragraphs and no markdown tables.
+    Dissolves any table rows into natural sentences.
+    """
+    lines = text.split("\n")
+    cleaned_lines = []
+    accumulated_cells = []
+
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("|") and stripped.endswith("|") and len(stripped) > 1:
+            # Skip table separator line like |---|---|
+            if set(stripped.replace("|", "").strip()).issubset({"-", ":", " "}):
+                continue
+            cells = [c.strip() for c in stripped.split("|")[1:-1] if c.strip()]
+            if cells:
+                accumulated_cells.append(" — ".join(cells))
+        else:
+            if accumulated_cells:
+                cleaned_lines.append(". ".join(accumulated_cells) + ".")
+                accumulated_cells = []
+            cleaned_lines.append(line)
+
+    if accumulated_cells:
+        cleaned_lines.append(". ".join(accumulated_cells) + ".")
+
+    return "\n".join(cleaned_lines)
+
+
 def generate_report(
     classification: dict,
     quality: dict,
@@ -25,18 +55,7 @@ def generate_report(
 ) -> str:
     """
     Generate a clinician-readable report using the Groq API.
-
-    Args:
-        classification: DR classification result dict.
-        quality: Image quality assessment result dict.
-        similar_cases: List of retrieved similar case dicts.
-        settings: Application settings with Groq API config.
-
-    Returns:
-        Generated report text (markdown formatted).
-
-    Raises:
-        Exception: If Groq API call fails.
+    Guaranteed to return text in paragraph format with no tables.
     """
     if not settings.GROQ_API_KEY or settings.GROQ_API_KEY == "your_groq_api_key_here":
         return (
@@ -74,9 +93,13 @@ def generate_report(
             logger.warning("LLM returned empty report")
             return "Report generation returned empty content. Please try again."
 
+        # Enforce paragraph-only output (strip any tables if generated)
+        report = remove_markdown_tables(report)
+
         logger.info(f"Report generated successfully ({len(report)} chars)")
         return report
 
     except Exception as e:
         logger.error(f"Groq API error: {e}")
         raise RuntimeError(f"Failed to generate report via Groq API: {e}") from e
+

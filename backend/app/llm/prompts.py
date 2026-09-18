@@ -16,9 +16,9 @@ CRITICAL RULES:
 1. NEVER override, contradict, or second-guess the DR classification model's diagnosis. The model's DR grade is the definitive finding — your job is to explain it, not change it.
 2. ALWAYS include a disclaimer that this is AI-assisted screening and must be reviewed by a qualified ophthalmologist.
 3. Use clear, professional medical language appropriate for a clinician audience.
-4. Structure the report with clear sections for easy scanning.
+4. STRICT FORMATTING RULE: The output MUST consist ONLY of narrative paragraphs. Absolutely DO NOT include ANY tables, markdown tables (| ... |), HTML tables, grids, or tabular columns under any circumstances. All descriptions, metrics, and recommendations must be written entirely as natural text paragraphs.
 5. When referencing similar cases, note that they are de-identified historical cases for context only.
-6. Include actionable next steps based on the DR severity grade and established clinical guidelines.
+6. Include actionable next steps based on the DR severity grade and established clinical guidelines, written strictly in paragraph form.
 7. Do NOT fabricate clinical findings that are not supported by the model's output.
 8. Do NOT include patient identifying information.
 """
@@ -40,29 +40,31 @@ REPORT_TEMPLATE = """Generate a concise clinician-readable report based on the f
 **Similar Historical Cases Retrieved:**
 {similar_cases_text}
 
-## Report Requirements
+## Formatting Requirement
+CRITICAL: The output MUST consist ONLY of narrative paragraphs. Absolutely NO tables (no markdown tables with pipes, no HTML tables, no grids, no columns) are permitted anywhere in the response.
 
-Generate the report with these exact sections:
+## Report Sections
+Generate the report with these exact section headings, writing each section strictly as natural prose paragraphs:
 
 ### 1. Summary
-A 2–3 sentence overview of the screening finding.
+A concise paragraph overview of the screening finding.
 
 ### 2. Classification Details
-Explain the DR grade, what it means clinically, and the model's confidence level.
+A paragraph explaining the DR grade, clinical meaning, and model confidence level in sentence form.
 
 ### 3. Detected Features
-Based on the DR grade, describe the typical lesion patterns expected at this severity level. Reference the Grad-CAM heatmap that highlights the relevant regions.
+A paragraph describing typical lesion patterns expected at this severity level, referencing the Grad-CAM heatmap highlighting the relevant regions.
 
 ### 4. Similar Cases
-Briefly reference the retrieved historical cases for clinical context. Note these are de-identified.
+A paragraph referencing the retrieved historical cases for clinical context.
 
 ### 5. Recommended Actions
-Based on established clinical guidelines (ICO/AAO), provide specific next steps appropriate for this DR grade — including follow-up timeline, referral urgency, and management considerations.
+A paragraph outlining recommended clinical next steps, follow-up timeline, and management considerations based on established guidelines.
 
 ### 6. Disclaimer
-Include a standard AI screening disclaimer.
+A paragraph providing the standard AI screening disclaimer.
 
-Keep the report professional, concise (400–600 words), and actionable.
+Remember: Write strictly in continuous paragraphs. Tables must NOT be present anywhere in the output.
 """
 
 

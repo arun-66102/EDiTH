@@ -37,7 +37,7 @@ class Settings(BaseSettings):
 
     # --- IQA Thresholds ---
     IQA_CONFIDENCE_THRESHOLD: float = 0.5
-    BLUR_THRESHOLD: float = 100.0  # Laplacian variance below this = blurry
+    BLUR_THRESHOLD: float = 35.0  # Laplacian variance below this = blurry
 
     # --- RAG Config ---
     RAG_COLLECTION_NAME: str = "dr_cases"

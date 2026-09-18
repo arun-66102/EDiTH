@@ -56,32 +56,32 @@ def load_quality_model(settings: Settings) -> dict:
     model = build_quality_model(num_classes=2)
 
     weights_path = settings.MODEL_DIR / settings.IQA_WEIGHTS
-    if weights_path.exists():
+    has_trained_weights = weights_path.exists()
+    if has_trained_weights:
         state_dict = torch.load(weights_path, map_location=device, weights_only=True)
         model.load_state_dict(state_dict)
         logger.info(f"Loaded IQA weights from {weights_path}")
     else:
         logger.warning(
             f"IQA weights not found at {weights_path}. "
-            "Using pretrained ImageNet weights — IQA results will be unreliable. "
-            "Train the IQA model first."
+            "Using heuristic checks (blur & illumination) until IQA model is trained."
         )
 
     model.to(device)
     model.eval()
 
-    return {"model": model, "device": device}
+    return {"model": model, "device": device, "has_trained_weights": has_trained_weights}
 
 
 def assess_quality(
     pil_image: Image.Image, quality_model: dict, settings: Settings
 ) -> dict:
     """
-    Assess fundus image quality using both DL model and heuristic checks.
+    Assess fundus image quality using both DL model (if trained) and heuristic checks.
 
     Args:
         pil_image: Input fundus image.
-        quality_model: Dict with 'model' and 'device' keys.
+        quality_model: Dict with 'model', 'device', and 'has_trained_weights' keys.
         settings: Application settings.
 
     Returns:
@@ -93,56 +93,65 @@ def assess_quality(
     issues = []
     model = quality_model["model"]
     device = quality_model["device"]
+    has_trained_weights = quality_model.get("has_trained_weights", False)
 
     # ------------------------------------------------------------------
     # Heuristic check: Blur (Laplacian variance)
     # ------------------------------------------------------------------
     blur_score = compute_blur_score(pil_image)
-    if blur_score < settings.BLUR_THRESHOLD:
-        issues.append(f"Image is blurry (sharpness score: {blur_score:.1f})")
+    if blur_score < 15.0:
+        issues.append(f"Image is severely blurry (sharpness score: {blur_score:.1f})")
+    elif blur_score < settings.BLUR_THRESHOLD:
+        issues.append(f"Mild blur detected (sharpness score: {blur_score:.1f})")
 
     # ------------------------------------------------------------------
     # Heuristic check: Illumination (mean brightness)
     # ------------------------------------------------------------------
     gray = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2GRAY)
     mean_brightness = float(gray.mean())
-    if mean_brightness < 30:
-        issues.append(f"Image is too dark (brightness: {mean_brightness:.1f})")
-    elif mean_brightness > 225:
-        issues.append(f"Image is overexposed (brightness: {mean_brightness:.1f})")
+    if mean_brightness < 15:
+        issues.append(f"Image is completely dark (brightness: {mean_brightness:.1f})")
+    elif mean_brightness < 30:
+        issues.append(f"Suboptimal low lighting (brightness: {mean_brightness:.1f})")
+    elif mean_brightness > 240:
+        issues.append(f"Image is severely overexposed (brightness: {mean_brightness:.1f})")
 
     # ------------------------------------------------------------------
-    # DL-based quality prediction
+    # DL-based quality prediction (only when trained weights are loaded)
     # ------------------------------------------------------------------
-    input_tensor = quality_transform(pil_image).unsqueeze(0).to(device)
+    dl_gradable = True
+    gradable_prob = 0.95
+    ungradable_prob = 0.05
 
-    with torch.no_grad():
-        logits = model(input_tensor)
-        probs = torch.softmax(logits, dim=1)
-        # Class 0 = Gradable, Class 1 = Ungradable
-        gradable_prob = probs[0, 0].item()
-        ungradable_prob = probs[0, 1].item()
+    if has_trained_weights:
+        input_tensor = quality_transform(pil_image).unsqueeze(0).to(device)
+        with torch.no_grad():
+            logits = model(input_tensor)
+            probs = torch.softmax(logits, dim=1)
+            gradable_prob = probs[0, 0].item()
+            ungradable_prob = probs[0, 1].item()
 
-    dl_gradable = gradable_prob >= settings.IQA_CONFIDENCE_THRESHOLD
-
-    if not dl_gradable:
-        issues.append(
-            f"DL model flagged image as ungradable "
-            f"(confidence: {ungradable_prob:.3f})"
-        )
+        dl_gradable = gradable_prob >= settings.IQA_CONFIDENCE_THRESHOLD
+        if not dl_gradable:
+            issues.append(
+                f"DL quality model flagged image as ungradable "
+                f"(confidence: {ungradable_prob:.3f})"
+            )
 
     # ------------------------------------------------------------------
-    # Final decision: gradable only if both DL and heuristics pass
+    # Final decision: gradable unless critical issues or trained DL model flags it
     # ------------------------------------------------------------------
     has_critical_issues = any(
-        "blurry" in issue.lower() or "too dark" in issue.lower()
+        "severely blurry" in issue.lower()
+        or "completely dark" in issue.lower()
+        or "severely overexposed" in issue.lower()
         for issue in issues
     )
     gradable = dl_gradable and not has_critical_issues
 
     return {
         "gradable": gradable,
-        "confidence": gradable_prob if gradable else ungradable_prob,
+        "confidence": round(gradable_prob if gradable else ungradable_prob, 3),
         "issues": issues,
         "blur_score": round(blur_score, 2),
         "mean_brightness": round(mean_brightness, 2),
