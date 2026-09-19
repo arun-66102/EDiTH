@@ -12,6 +12,16 @@
 </head>
 <body>
 
+    <!-- ===== ANIMATED RETINAL EYE BACKGROUND ===== -->
+    <div class="retina-bg" aria-hidden="true">
+        <div class="retina-bg__image"></div>
+        <div class="retina-bg__laser"></div>
+        <div class="retina-bg__ring retina-bg__ring--outer"></div>
+        <div class="retina-bg__ring retina-bg__ring--middle"></div>
+        <div class="retina-bg__ring retina-bg__ring--inner"></div>
+        <div class="retina-bg__pulse"></div>
+    </div>
+
     <!-- ===== HEADER ===== -->
     <header class="header">
         <div class="header__brand">
@@ -19,11 +29,11 @@
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
                     <circle cx="16" cy="16" r="14" stroke="url(#logo-grad)" stroke-width="2.5" fill="none"/>
                     <circle cx="16" cy="16" r="7" fill="url(#logo-grad)" opacity="0.8"/>
-                    <circle cx="16" cy="16" r="3" fill="#0a0f1c"/>
+                    <circle cx="16" cy="16" r="3" fill="#ffffff"/>
                     <defs>
                         <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32">
-                            <stop offset="0%" stop-color="#60a5fa"/>
-                            <stop offset="100%" stop-color="#a78bfa"/>
+                            <stop offset="0%" stop-color="#2563eb"/>
+                            <stop offset="100%" stop-color="#4f46e5"/>
                         </linearGradient>
                     </defs>
                 </svg>
@@ -40,15 +50,34 @@
     <!-- ===== MAIN ===== -->
     <main class="main">
 
+        <!-- ===== HERO SECTION ===== -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-eye-hud">
+                <div class="hero-eye-ring hero-eye-ring--spin"></div>
+                <div class="hero-eye-ring hero-eye-ring--reverse"></div>
+                <div class="hero-eye-core">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="hero-badge">Clinical AI Screening System</div>
+            <h1 class="hero-title">
+                <span class="typing-text" id="typingHero">EDiTH</span><span class="typing-cursor" id="typingCursor">|</span>
+            </h1>
+            <p class="hero-desc">AI-Powered Retinal Screening &amp; Clinical Decision-Support System</p>
+        </section>
+
         <!-- Upload Section -->
         <section class="upload-section" id="uploadSection">
             <div class="upload-card glass-card">
                 <div class="upload-zone" id="uploadZone">
                     <div class="upload-zone__icon">
                         <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                            <path d="M32 8L32 40" stroke="#60a5fa" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M22 18L32 8L42 18" stroke="#60a5fa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 44V48C12 51.3137 14.6863 54 18 54H46C49.3137 54 52 51.3137 52 48V44" stroke="#60a5fa" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M32 8L32 40" stroke="#1d4ed8" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M22 18L32 8L42 18" stroke="#1d4ed8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 44V48C12 51.3137 14.6863 54 18 54H46C49.3137 54 52 51.3137 52 48V44" stroke="#1d4ed8" stroke-width="3" stroke-linecap="round"/>
                         </svg>
                     </div>
                     <h2 class="upload-zone__title">Upload Fundus Image</h2>
@@ -66,7 +95,16 @@
                         <p class="preview__filename" id="previewFilename"></p>
                         <div class="preview__actions">
                             <button class="btn btn--primary" id="analyzeBtn">
-                                <span class="btn__icon">🔬</span> Analyze
+                                <span class="btn__icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="9"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                        <line x1="12" y1="3" x2="12" y2="6"/>
+                                        <line x1="12" y1="18" x2="12" y2="21"/>
+                                        <line x1="3" y1="12" x2="6" y2="12"/>
+                                        <line x1="18" y1="12" x2="21" y2="12"/>
+                                    </svg>
+                                </span> Analyze
                             </button>
                             <button class="btn btn--ghost" id="clearBtn">Clear</button>
                         </div>
@@ -110,16 +148,35 @@
 
             <!-- Results Top Bar -->
             <div class="results-topbar" style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.25rem; margin-bottom: 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
-                <div style="font-weight: 600; font-size: 1.1rem; color: var(--text-bright);">📊 Screening Analysis Complete</div>
+                <div style="font-weight: 600; font-size: 1.05rem; color: var(--text-bright); display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18 17V9"/>
+                        <path d="M13 17V5"/>
+                        <path d="M8 17v-3"/>
+                    </svg>
+                    Screening Analysis Complete
+                </div>
                 <button class="btn btn--primary" id="topNewAnalysisBtn">
-                    <span class="btn__icon">📷</span> Upload Another Image
+                    <span class="btn__icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                    </span> Upload Another Image
                 </button>
             </div>
 
             <!-- Quality Gate -->
             <div class="glass-card result-card quality-card" id="qualityCard">
                 <h3 class="result-card__title">
-                    <span class="result-card__icon">🔍</span> Image Quality
+                    <span class="result-card__icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            <circle cx="11" cy="11" r="3"/>
+                        </svg>
+                    </span> Image Quality
                 </h3>
                 <div class="quality-result" id="qualityResult"></div>
             </div>
@@ -127,7 +184,15 @@
             <!-- DR Classification -->
             <div class="glass-card result-card classification-card" id="classificationCard">
                 <h3 class="result-card__title">
-                    <span class="result-card__icon">🧠</span> DR Classification
+                    <span class="result-card__icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3"/>
+                            <circle cx="6" cy="12" r="3"/>
+                            <circle cx="18" cy="19" r="3"/>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                    </span> DR Classification
                 </h3>
                 <div class="classification-result" id="classificationResult"></div>
             </div>
@@ -135,7 +200,13 @@
             <!-- Grad-CAM Viewer -->
             <div class="glass-card result-card gradcam-card" id="gradcamCard">
                 <h3 class="result-card__title">
-                    <span class="result-card__icon">🔥</span> Grad-CAM Heatmap
+                    <span class="result-card__icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                            <polyline points="2 17 12 22 22 17"/>
+                            <polyline points="2 12 12 17 22 12"/>
+                        </svg>
+                    </span> Grad-CAM Heatmap
                 </h3>
                 <div class="gradcam-viewer" id="gradcamViewer">
                     <div class="gradcam-toggle">
@@ -152,7 +223,11 @@
             <!-- Similar Cases -->
             <div class="glass-card result-card cases-card" id="casesCard">
                 <h3 class="result-card__title">
-                    <span class="result-card__icon">📂</span> Similar Historical Cases
+                    <span class="result-card__icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </span> Similar Historical Cases
                 </h3>
                 <div class="cases-list" id="casesList"></div>
             </div>
@@ -160,7 +235,14 @@
             <!-- LLM Report -->
             <div class="glass-card result-card report-card" id="reportCard">
                 <h3 class="result-card__title">
-                    <span class="result-card__icon">📝</span> Clinical Report
+                    <span class="result-card__icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                            <line x1="9" y1="12" x2="15" y2="12"/>
+                            <line x1="9" y1="16" x2="13" y2="16"/>
+                        </svg>
+                    </span> Clinical Report
                 </h3>
                 <div class="report-content" id="reportContent"></div>
             </div>
@@ -171,7 +253,12 @@
             <!-- New Analysis Button -->
             <div class="new-analysis">
                 <button class="btn btn--primary btn--large" id="newAnalysisBtn">
-                    <span class="btn__icon">📷</span> New Analysis
+                    <span class="btn__icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                    </span> New Analysis
                 </button>
             </div>
         </section>
@@ -179,7 +266,13 @@
         <!-- Error Section -->
         <section class="error-section" id="errorSection" style="display: none;">
             <div class="glass-card error-card">
-                <div class="error-icon">⚠️</div>
+                <div class="error-icon">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                </div>
                 <h3 class="error-title">Analysis Failed</h3>
                 <p class="error-message" id="errorMessage"></p>
                 <button class="btn btn--primary" id="retryBtn">Try Again</button>
@@ -191,7 +284,11 @@
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <p class="footer__disclaimer">
-            ⚕️ EDiTH is a screening-assistance tool. All outputs must be reviewed by a certified ophthalmologist before clinical action.
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <line x1="12" y1="8" x2="12" y2="14"/>
+                <line x1="9" y1="11" x2="15" y2="11"/>
+            </svg>EDiTH is a screening-assistance tool. All outputs must be reviewed by a certified ophthalmologist before clinical action.
         </p>
         <p class="footer__copyright">EDiTH — AI-Powered DR Screening & Clinical Decision Support</p>
     </footer>

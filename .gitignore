@@ -32,6 +32,8 @@ Thumbs.db
 *.pt
 *.onnx
 *.h5
+*.ppt
+*.pptx
 
 # Training checkpoints
 training/checkpoints/

@@ -118,6 +118,9 @@ function handleFile(file) {
 
 clearBtn.addEventListener("click", resetUpload);
 
+const ICON_ANALYZE = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/><line x1="3" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="21" y2="12"/></svg>';
+const ICON_SPINNER = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 0.8s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
+
 function resetUpload() {
     selectedFile = null;
     originalImageDataUrl = null;
@@ -134,7 +137,7 @@ function resetUpload() {
     errorSection.style.display = "none";
 
     analyzeBtn.disabled = false;
-    analyzeBtn.innerHTML = '<span class="btn__icon">🔬</span> Analyze';
+    analyzeBtn.innerHTML = `<span class="btn__icon">${ICON_ANALYZE}</span> Analyze`;
 
     if (loadingInterval) {
         clearInterval(loadingInterval);
@@ -160,7 +163,7 @@ async function startAnalysis() {
     if (!selectedFile) return;
 
     analyzeBtn.disabled = true;
-    analyzeBtn.innerHTML = '<span class="btn__icon">⏳</span> Analyzing...';
+    analyzeBtn.innerHTML = `<span class="btn__icon">${ICON_SPINNER}</span> Analyzing...`;
 
     // Show loading
     uploadSection.style.display = "none";
@@ -192,7 +195,7 @@ async function startAnalysis() {
         showError(err.message || "Failed to connect to the server. Is the backend running?");
     } finally {
         analyzeBtn.disabled = false;
-        analyzeBtn.innerHTML = '<span class="btn__icon">🔬</span> Analyze';
+        analyzeBtn.innerHTML = `<span class="btn__icon">${ICON_ANALYZE}</span> Analyze`;
         if (loadingInterval) {
             clearInterval(loadingInterval);
             loadingInterval = null;
@@ -261,7 +264,10 @@ function renderQuality(quality) {
     }
 
     const badgeClass = quality.gradable ? "quality-badge--pass" : "quality-badge--fail";
-    const badgeText = quality.gradable ? "✓ Gradable" : "✗ Ungradable";
+    const badgeIcon = quality.gradable
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><polyline points="20 6 9 17 4 12"/></svg>'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    const badgeLabel = quality.gradable ? "Gradable" : "Ungradable";
 
     let issuesHtml = "";
     if (quality.issues && quality.issues.length > 0) {
@@ -272,7 +278,7 @@ function renderQuality(quality) {
     }
 
     container.innerHTML = `
-        <div class="quality-badge ${badgeClass}">${badgeText}</div>
+        <div class="quality-badge ${badgeClass}">${badgeIcon}${badgeLabel}</div>
         <div class="quality-details">
             <div class="quality-stat">
                 <span class="quality-stat__label">Confidence</span>
@@ -440,10 +446,63 @@ function renderReport(report) {
 }
 
 // ============================================================
+// Hero Typing Animation
+// ============================================================
+function initHeroTyping() {
+    const typingElement = document.getElementById("typingHero");
+    if (!typingElement) return;
+
+    const phrase = "EDiTH";
+    let isDeleting = false;
+    let charIndex = 0;
+
+    // Reset initial text so typing begins visibly from empty
+    typingElement.textContent = "";
+
+    function typeStep() {
+        if (!isDeleting) {
+            charIndex++;
+            typingElement.textContent = phrase.slice(0, charIndex);
+
+            if (charIndex === phrase.length) {
+                // Keep the complete word visible with the cursor blinking
+                setTimeout(() => {
+                    isDeleting = true;
+                    typeStep();
+                }, 3500);
+                return;
+            }
+
+            // Keystroke cadence with natural slight variance
+            const speed = 140 + Math.random() * 80;
+            setTimeout(typeStep, speed);
+        } else {
+            charIndex--;
+            typingElement.textContent = phrase.slice(0, charIndex);
+
+            if (charIndex === 0) {
+                isDeleting = false;
+                // Pause before typing starts again
+                setTimeout(typeStep, 600);
+                return;
+            }
+
+            // Quick backspace cadence
+            setTimeout(typeStep, 80);
+        }
+    }
+
+    // Begin typing after initial render
+    setTimeout(typeStep, 350);
+}
+
+// ============================================================
 // Init
 // ============================================================
 document.addEventListener("DOMContentLoaded", () => {
+    initHeroTyping();
     checkServerHealth();
     // Re-check health every 30 seconds
     setInterval(checkServerHealth, 30000);
 });
+
